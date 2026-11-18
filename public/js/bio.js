@@ -191,7 +191,7 @@ export async function initBioPage() {
   } catch (error) {
     console.error('Lỗi khi tải thông tin Bio:', error);
     container.innerHTML = `
-      <main class="card" style="padding: 32px 24px; text-align: center;">
+      <main class="card" style="padding: 32px 24px; text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <div style="font-size: 40px; margin-bottom: 12px;">🔍</div>
         <h2 style="font-size: 20px; margin-bottom: 8px;">Không tìm thấy hồ sơ</h2>
         <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">${escapeHtml(error.message)}</p>

@@ -11,6 +11,9 @@
   --accent-ink: #ffffff;
   --soft: #eaf4f7;
   --cover-grad: radial-gradient(circle at 85% 0%, rgba(255, 255, 255, .28), transparent 45%), linear-gradient(135deg, #0b4f66, #0e8aa6);
+  --card-width: 400px;
+  --card-height: 670px;
+  --card-min-height: 480px;
   color-scheme: light;
 }
 
@@ -64,6 +67,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   display: grid;
   place-items: center;
   padding: 24px 16px;
@@ -73,12 +77,21 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   position: relative;
+  overflow-x: hidden;
+}
+
+#bio-container {
+  width: 100%;
+  max-width: var(--card-width);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .top-bar {
   position: fixed;
-  top: 16px;
-  right: 16px;
+  top: max(16px, env(safe-area-inset-top, 16px));
+  right: max(16px, env(safe-area-inset-right, 16px));
   z-index: 100;
   display: flex;
   gap: 8px;
@@ -110,7 +123,12 @@ body {
 
 .card {
   width: 100%;
-  max-width: 400px;
+  max-width: var(--card-width);
+  height: calc(100vh - 32px);
+  height: min(var(--card-height), calc(100dvh - 32px));
+  min-height: var(--card-min-height);
+  display: flex;
+  flex-direction: column;
   background: var(--card);
   border-radius: 28px;
   border: 1px solid var(--line);
@@ -118,10 +136,12 @@ body {
   box-shadow: 0 24px 60px -28px rgba(19, 41, 61, .35);
   animation: rise .6s cubic-bezier(.2, .7, .2, 1) both;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
 .cover {
   height: 112px;
+  flex-shrink: 0;
   background: var(--cover-grad);
   transition: background 0.3s ease;
 }
@@ -130,6 +150,7 @@ body {
   padding: 0 28px 8px;
   text-align: center;
   margin-top: -48px;
+  flex-shrink: 0;
 }
 
 .avatar {
@@ -146,6 +167,7 @@ body {
   justify-content: center;
   box-shadow: 0 4px 14px rgba(19, 41, 61, 0.12);
   transition: outline-color 0.3s ease;
+  flex-shrink: 0;
 }
 
 .avatar img {
@@ -161,12 +183,14 @@ h1 {
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -.01em;
+  word-break: break-word;
 }
 
 .role {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 15px;
+  word-break: break-word;
 }
 
 .chip {
@@ -178,6 +202,10 @@ h1 {
   color: var(--accent);
   font-size: 13.5px;
   font-weight: 600;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -185,7 +213,8 @@ h1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  padding: 22px 28px 8px;
+  padding: 20px 28px 8px;
+  flex-shrink: 0;
 }
 
 .actions.single-col {
@@ -235,7 +264,32 @@ h1 {
 .list {
   list-style: none;
   margin: 0;
-  padding: 16px 28px 28px;
+  padding: 8px 28px 24px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(91, 111, 130, 0.25) transparent;
+}
+
+.list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.list::-webkit-scrollbar-thumb {
+  background-color: rgba(91, 111, 130, 0.25);
+  border-radius: 999px;
+}
+
+.list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(91, 111, 130, 0.5);
 }
 
 .list li {
@@ -332,5 +386,104 @@ a:focus-visible {
   }
   .btn {
     transition: none;
+  }
+}
+
+/* ========================================================
+   RESPONSIVE DESIGN CHO MỌI THIẾT BỊ (ĐỘ DÀI CỐ ĐỊNH)
+   ======================================================== */
+
+/* Màn hình có chiều cao hạn chế (Laptop 1366x768, màn hình nhỏ, tablet) */
+@media (max-height: 720px) {
+  :root {
+    --card-height: 590px;
+    --card-min-height: 440px;
+  }
+  .cover {
+    height: 96px;
+  }
+  .head {
+    margin-top: -40px;
+    padding: 0 20px 6px;
+  }
+  .avatar {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  .role {
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  .chip {
+    margin-top: 8px;
+    padding: 4px 12px;
+    font-size: 12.5px;
+  }
+  .actions {
+    padding: 14px 20px 6px;
+    gap: 8px;
+  }
+  .btn {
+    padding: 10px 10px;
+    font-size: 14px;
+  }
+  .list {
+    padding: 6px 20px 16px;
+  }
+  .row {
+    padding: 10px 0;
+    gap: 10px;
+  }
+  .ico {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Màn hình hẹp (Smartphone < 440px như iPhone SE, 13, 14, 15, Android phổ thông) */
+@media (max-width: 440px) {
+  body {
+    padding: 12px;
+  }
+  .card {
+    border-radius: 24px;
+  }
+  .head {
+    padding: 0 18px 8px;
+  }
+  .actions {
+    padding: 14px 18px 8px;
+  }
+  .list {
+    padding: 6px 18px 20px;
+  }
+  .row {
+    gap: 12px;
+  }
+  .top-bar {
+    top: max(10px, env(safe-area-inset-top, 10px));
+    right: max(10px, env(safe-area-inset-right, 10px));
+  }
+  .admin-link-btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Thiết bị xoay ngang chiều cao thấp (Landscape mobile < 500px) */
+@media (max-height: 500px) {
+  body {
+    display: block;
+    padding: 16px 12px;
+    min-height: auto;
+  }
+  .card {
+    margin: 0 auto;
+    height: 480px;
+    min-height: 480px;
   }
 }

@@ -464,6 +464,22 @@ body {
   justify-content: center;
 }
 
+.preview-container .card {
+  height: clamp(520px, calc(100dvh - 140px), var(--card-height));
+  max-height: calc(100dvh - 140px);
+}
+
+@media (max-width: 1080px) {
+  .preview-panel {
+    position: static;
+    margin-top: 24px;
+  }
+  .preview-container .card {
+    height: min(var(--card-height), calc(100dvh - 40px));
+    max-height: none;
+  }
+}
+
 /* Save Bar */
 .sticky-save-bar {
   position: sticky;
