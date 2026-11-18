@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản Trị Trang Bio – Bio Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/css/bio.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+
+<body>
+  <!-- Header Navbar -->
+  <header class="admin-navbar">
+    <a href="/admin" class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <span>Bio Management Dashboard</span>
+    </a>
+
+    <!-- System Status Badges -->
+    <div class="system-status-badges">
+      <div id="mongo-status-badge" class="status-badge warning" title="Đang kiểm tra kết nối MongoDB...">
+        <span class="status-dot"></span> MongoDB: Đang kiểm tra...
+      </div>
+      <div id="uploadthing-status-badge" class="status-badge warning" title="Đang kiểm tra trạng thái UploadThing...">
+        <span class="status-dot"></span> UploadThing: Đang kiểm tra...
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <button type="button" id="btn-view-live" class="nav-btn secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        Xem trang Bio
+      </button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    <!-- Profile Toolbar -->
+    <section class="profile-toolbar">
+      <div class="profile-select-group">
+        <label for="profile-select">Hồ sơ đang chọn:</label>
+        <select id="profile-select" class="profile-select">
+          <option value="">Đang tải danh sách hồ sơ...</option>
+        </select>
+      </div>
+
+      <div class="toolbar-buttons">
+        <button type="button" id="btn-new-profile" class="nav-btn secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Thêm Bio mới
+        </button>
+        <button type="button" id="btn-set-default" class="nav-btn secondary" title="Đặt làm hồ sơ hiển thị khi truy cập trang chủ /">
+          ⭐ Đặt làm mặc định
+        </button>
+        <button type="button" id="btn-delete-profile" class="nav-btn secondary" style="color: var(--admin-danger); border-color: #fecaca;">
+          🗑️ Xóa hồ sơ
+        </button>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <div class="admin-grid">
+      <!-- Left: Editor Forms -->
+      <div class="form-panel">
+
+        <!-- 1. Basic Info -->
+        <div class="admin-card-box">
+          <h2 class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Thông tin cơ bản
+          </h2>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="input-name">Họ và tên *</label>
+              <input type="text" id="input-name" class="form-control" placeholder="Ví dụ: Nguyễn Thị Ngọc Phú" required>
+            </div>
+            <div class="form-group">
+              <label for="input-role">Chức danh / Vị trí</label>
+              <input type="text" id="input-role" class="form-control" placeholder="Ví dụ: Phòng Kế Hoạch Đấu Thầu">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="input-company">Đơn vị / Công ty</label>
+              <input type="text" id="input-company" class="form-control" placeholder="Ví dụ: Trung Nam EC">
+            </div>
+            <div class="form-group">
+              <label for="input-slug">Đường dẫn định danh (Slug URL) *</label>
+              <input type="text" id="input-slug" class="form-control" placeholder="Ví dụ: ngoc-phu">
+              <span class="form-hint">Đường link sẽ là: <code>/u/slug-cua-ban</code></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Avatar with UploadThing -->
+        <div class="admin-card-box">
+          <h2 class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Ảnh đại diện (Avatar) với UploadThing
+          </h2>
+          <p class="card-desc">Lưu trữ hình ảnh trực tiếp lên đám mây tốc độ cao qua <a href="https://uploadthing.com/" target="_blank" rel="noopener" style="color: var(--admin-accent); font-weight: 600;">UploadThing.com</a>.</p>
+
+          <div class="avatar-upload-wrap">
+            <div class="avatar-preview-box">
+              <img id="avatar-preview-img" src="/assets/images/avatar.jpg" alt="Preview Avatar">
+            </div>
+            <div class="avatar-upload-info">
+              <label class="upload-btn-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Chọn ảnh tải lên UploadThing
+                <input type="file" id="avatar-file-input" accept="image/*" style="display: none;">
+              </label>
+              <div id="upload-status-text" class="upload-status">Hỗ trợ JPG, PNG, WEBP (tối đa 5MB)</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="input-avatar-url">Đường dẫn ảnh đại diện (URL)</label>
+            <input type="text" id="input-avatar-url" class="form-control" placeholder="https://... hoặc /assets/images/avatar.jpg">
+            <span class="form-hint">Tự động điền sau khi tải ảnh lên UploadThing hoặc có thể dán link ảnh trực tiếp.</span>
+          </div>
+        </div>
+
+        <!-- 3. Contact & Quick Actions -->
+        <div class="admin-card-box">
+          <h2 class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z" /></svg>
+            Thông tin liên hệ & Nút thao tác nhanh
+          </h2>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label for="input-phone">Số điện thoại</label>
+              <input type="tel" id="input-phone" class="form-control" placeholder="Ví dụ: 0967 827 848">
+            </div>
+            <div class="form-group">
+              <label for="input-email">Địa chỉ Email</label>
+              <input type="email" id="input-email" class="form-control" placeholder="Ví dụ: phuntn@trungnamgroup.com.vn">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="input-department">Phòng ban / Đơn vị chi tiết</label>
+            <input type="text" id="input-department" class="form-control" placeholder="Ví dụ: P. KHĐT">
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid var(--admin-line); margin: 18px 0;">
+
+          <label style="font-size: 13.5px; font-weight: 700; margin-bottom: 10px; display: block;">Hai nút thao tác nhanh trên đầu thẻ:</label>
+          <div class="form-grid-2">
+            <div style="background: var(--admin-bg); padding: 12px; border-radius: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; margin-bottom: 8px;">
+                <input type="checkbox" id="check-call" checked> Bật nút Gọi điện
+              </label>
+              <input type="text" id="input-call-label" class="form-control" value="Gọi điện" placeholder="Tên nút (Gọi điện)">
+            </div>
+            <div style="background: var(--admin-bg); padding: 12px; border-radius: 8px;">
+              <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; margin-bottom: 8px;">
+                <input type="checkbox" id="check-email" checked> Bật nút Gửi email
+              </label>
+              <input type="text" id="input-email-label" class="form-control" value="Gửi email" placeholder="Tên nút (Gửi email)">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Custom Rows & Links -->
+        <div class="admin-card-box">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <h2 class="card-title" style="margin: 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+              Dòng thông tin & Mạng xã hội bổ sung
+            </h2>
+            <button type="button" id="btn-add-custom-link" class="nav-btn secondary" style="padding: 6px 12px; font-size: 13px;">
+              + Thêm dòng mới
+            </button>
+          </div>
+          <p class="card-desc">Thêm các liên kết như Zalo, Facebook, LinkedIn, Website, Địa chỉ văn phòng...</p>
+
+          <div id="custom-links-container">
+            <!-- Custom items inserted here -->
+          </div>
+        </div>
+
+        <!-- 5. Cover Gradient & Theme -->
+        <div class="admin-card-box">
+          <h2 class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 10 10 0 0 0 0-20"/></svg>
+            Tông màu nền thẻ (Cover Theme)
+          </h2>
+          <div class="theme-picker">
+            <div class="theme-option active" data-theme="ocean">
+              <div class="theme-swatch" style="background: linear-gradient(135deg, #0b4f66, #0e8aa6);"></div>
+              <span class="theme-name">Ocean Blue</span>
+            </div>
+            <div class="theme-option" data-theme="navy">
+              <div class="theme-swatch" style="background: linear-gradient(135deg, #0f172a, #1e3a8a);"></div>
+              <span class="theme-name">Deep Navy</span>
+            </div>
+            <div class="theme-option" data-theme="emerald">
+              <div class="theme-swatch" style="background: linear-gradient(135deg, #064e3b, #10b981);"></div>
+              <span class="theme-name">Emerald</span>
+            </div>
+            <div class="theme-option" data-theme="sunset">
+              <div class="theme-swatch" style="background: linear-gradient(135deg, #b91c1c, #f59e0b);"></div>
+              <span class="theme-name">Sunset</span>
+            </div>
+            <div class="theme-option" data-theme="purple">
+              <div class="theme-swatch" style="background: linear-gradient(135deg, #4c1d95, #8b5cf6);"></div>
+              <span class="theme-name">Purple</span>
+            </div>
+            <div class="theme-option" data-theme="charcoal">
+              <div class="theme-swatch" style="background: linear-gradient(135deg, #0f172a, #334155);"></div>
+              <span class="theme-name">Charcoal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Save Action Bar -->
+        <div class="sticky-save-bar">
+          <div class="save-info">
+            Liên kết xem công khai: <a id="public-link-anchor" href="/" target="_blank" style="color: var(--admin-accent); font-weight: 600;">/</a>
+          </div>
+          <button type="button" id="btn-save" class="save-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+              <polyline points="17 21 17 13 7 13 7 21"/>
+              <polyline points="7 3 7 8 15 8"/>
+            </svg>
+            Lưu thông tin Bio
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right: Live Real-time Card Preview -->
+      <aside class="preview-panel">
+        <div class="preview-header">
+          <span class="preview-title">Xem trước trực tiếp (Live Preview)</span>
+        </div>
+        <div class="preview-container">
+          <div id="preview-card-wrap" style="width: 100%; max-width: 400px;">
+            <!-- Rendered by admin.js -->
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { initAdmin } from '/js/admin.js';
+    initAdmin();
+  </script>
+</body>
+
+</html>
