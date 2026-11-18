@@ -134,6 +134,42 @@ vercel --prod
 
 ---
 
+## 🚀 Hướng Dẫn Deploy Lên Render.com (Miễn Phí)
+
+Dự án này là một ứng dụng **Express Node.js hoàn chỉnh**, kết hợp cả Frontend lẫn Backend, vì vậy triển khai dưới dạng **Web Service** trên Render.com chạy rất mượt và không gặp giới hạn Serverless.
+
+### Cách 1: Deploy thủ công qua Render Dashboard (Đơn giản nhất)
+1. Đẩy code lên GitHub:
+   ```bash
+   git add .
+   git commit -m "Add render config"
+   git push origin main
+   ```
+2. Đăng nhập [Render.com](https://dashboard.render.com/) và nhấn nút **New +** -> chọn **Web Service**.
+3. Chọn repository GitHub chứa dự án và nhấn **Connect**.
+4. Thiết lập thông số:
+   - **Name**: `bio-rendering` (hoặc tên tuỳ ý)
+   - **Region**: Chọn gần Việt Nam (như `Singapore`)
+   - **Branch**: `main`
+   - **Runtime**: `Node`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Instance Type**: `Free`
+5. Thêm các biến môi trường (**Environment Variables**):
+   - `NODE_VERSION` = `20`
+   - `MONGODB_URI` = `mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/bio-rendering?retryWrites=true&w=majority`
+   - `UPLOADTHING_TOKEN` = `ufs_...` (Token lấy từ uploadthing.com)
+   - `APP_URL` = `https://<ten-service-render>.onrender.com`
+6. Nhấn **Deploy Web Service** và chờ 1-2 phút là website online!
+
+### Cách 2: Deploy qua Blueprint (`render.yaml`)
+Dự án đã có sẵn file `render.yaml`.
+1. Trên Render Dashboard, nhấn **New +** -> **Blueprint**.
+2. Chọn repo GitHub của bạn -> Render sẽ tự động đọc cấu hình trong `render.yaml`.
+3. Điền các biến `MONGODB_URI` và `UPLOADTHING_TOKEN` khi được yêu cầu, sau đó bấm **Apply**.
+
+---
+
 ## 📁 Cấu Trúc Thư Mục
 
 ```text
