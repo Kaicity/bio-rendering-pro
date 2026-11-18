@@ -82,6 +82,58 @@ UPLOADTHING_TOKEN=ufs_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ---
 
+## ⚡ Hướng Dẫn Deploy Lên Vercel (Miễn Phí)
+
+Dự án đã được cấu hình sẵn file `vercel.json` và serverless handler `api/index.js` để chạy hoàn hảo trên nền tảng **Vercel Serverless**.
+
+### 1. Chuẩn bị Cơ sở dữ liệu Cloud (MongoDB Atlas)
+> ⚠️ **Lưu ý quan trọng:** Trên Vercel (môi trường Serverless), hệ thống file cục bộ là tạm thời (ephemeral), do đó bạn **cần sử dụng MongoDB Atlas** (miễn phí) để lưu dữ liệu vĩnh viễn:
+1. Đăng ký tài khoản miễn phí tại [MongoDB Atlas](https://www.mongodb.com/cloud/atlas).
+2. Tạo một **M0 Free Cluster**.
+3. Vào mục **Database Access** tạo User và Password.
+4. Vào mục **Network Access** chọn **Add IP Address** -> chọn **Allow Access from Anywhere** (`0.0.0.0/0`).
+5. Vào **Clusters** -> nhấn **Connect** -> chọn **Drivers (Node.js)** để lấy Connection String:
+   ```text
+   mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/bio-rendering?retryWrites=true&w=majority
+   ```
+
+### 2. Chuẩn bị Token UploadThing
+1. Đăng nhập [https://uploadthing.com/](https://uploadthing.com/).
+2. Tạo App và vào mục **API Keys** copy token (`ufs_...`).
+
+### 3. Deploy qua Vercel Dashboard (Khuyên dùng)
+1. Đẩy mã nguồn dự án lên GitHub:
+   ```bash
+   git add .
+   git commit -m "Deploy bio-rendering to Vercel"
+   git push origin main
+   ```
+2. Đăng nhập [Vercel](https://vercel.com/) và chọn **Add New...** -> **Project**.
+3. Chọn repository GitHub vừa đẩy lên và nhấn **Import**.
+4. Mở phần **Environment Variables** và thêm 2 biến:
+   - `MONGODB_URI`: Điền connection string MongoDB Atlas của bạn.
+   - `UPLOADTHING_TOKEN`: Điền token UploadThing của bạn (`ufs_...`).
+5. Nhấn nút **Deploy**! Chỉ mất khoảng 30 giây là trang web sẽ online với tên miền dạng `https://ten-du-an.vercel.app/`.
+
+### 4. Deploy nhanh bằng Vercel CLI
+Nếu muốn deploy trực tiếp từ máy tính bằng dòng lệnh:
+```bash
+# Cài Vercel CLI (nếu chưa có)
+npm install -g vercel
+
+# Đăng nhập và deploy
+vercel
+
+# Thêm biến môi trường
+vercel env add MONGODB_URI
+vercel env add UPLOADTHING_TOKEN
+
+# Deploy lên bản Production chính thức
+vercel --prod
+```
+
+---
+
 ## 📁 Cấu Trúc Thư Mục
 
 ```text
